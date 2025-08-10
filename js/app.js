@@ -6,7 +6,7 @@ const listaCursos = document.querySelector('#lista-cursos');
 let articulosCarrito = [];
 
 cargarEventListeners();
-function cargarEventListeners(e) {
+function cargarEventListeners() {
     // Cuando se agrega un curso presionando "Agregar al carrito"
     listaCursos.addEventListener('click', agregarCurso);
 }
@@ -36,12 +36,28 @@ function leerDatosCurso(curso) {
         cantidad: 1
     }
 
-    // Agrega elementos al arreglo de carrito
-    // Tengo que ir copiando mi arreglo anterior para no perder los artículos que fui agregando previamente.
-    // Vamos a tomar una copia de lo que haya en el carrito, ya sea que esté vacío, haya uno o veinte elementos agregados y le vamos a ir agregando el objeto de info curso.
-    articulosCarrito = [...articulosCarrito, infoCurso];
-
-    console.log(articulosCarrito);
+    // Revisa si un elemento ya existe en el carrito
+    // .some permite iterar en un arreglo y verificar si al menos un elemento cumple con la condición
+    const existe = articulosCarrito.some(curso => curso.id === infoCurso.id);
+    
+    if(existe) {
+        // Actualizar la cantidad
+        const cursos = articulosCarrito.map(curso => {
+            if (curso.id === infoCurso.id) {
+                curso.cantidad++;
+                return curso; // Retorna el objeto actualizado
+            } else {
+                return curso; // Retorna el objeto sin cambios
+            }
+        });
+        articulosCarrito = [...cursos];
+    } else {
+        // Agrega elementos al arreglo de carrito
+        // Tengo que ir copiando mi arreglo anterior para no perder los artículos que fui agregando previamente.
+        // Vamos a tomar una copia de lo que haya en el carrito, ya sea que esté vacío, haya uno o veinte elementos agregados y le vamos a ir agregando el objeto de info curso.
+        articulosCarrito = [...articulosCarrito, infoCurso];
+        console.log(articulosCarrito); // Muestra el arreglo de objetos que tengo en el carrito
+    }
 
     carritoHTML();
 }
