@@ -9,6 +9,9 @@ cargarEventListeners();
 function cargarEventListeners() {
     // Cuando se agrega un curso presionando "Agregar al carrito"
     listaCursos.addEventListener('click', agregarCurso);
+
+    // Eliminar cursos del carrito
+    carrito.addEventListener('click', eliminarCurso);
 }
 
 // Funciones
@@ -20,6 +23,21 @@ function agregarCurso(e) {
         // console.log(e.target.parentElement.parentElement); // <div class="card"> app.js:20:17
         const cursoSeleccionado = e.target.parentElement.parentElement;
         leerDatosCurso(cursoSeleccionado);
+    }
+}
+
+// Eliminar curso del carrito
+function eliminarCurso(e) {
+    // console.log(e.target.classList); // DOMTokenList(2) ['borrar-curso', value: 'borrar-curso']
+    if (e.target.classList.contains('borrar-curso')) {
+        // console.log(e.target.getAttribute('data-id')); // 3
+        const cursoId = e.target.getAttribute('data-id');
+
+        // Elimina del arreglo el articulosCarrito por el data-id
+        articulosCarrito = articulosCarrito.filter(curso => curso.id !== cursoId);
+
+        // Iterar sobre el carrito 
+        carritoHTML();
     }
 }
 
@@ -56,7 +74,6 @@ function leerDatosCurso(curso) {
         // Tengo que ir copiando mi arreglo anterior para no perder los artículos que fui agregando previamente.
         // Vamos a tomar una copia de lo que haya en el carrito, ya sea que esté vacío, haya uno o veinte elementos agregados y le vamos a ir agregando el objeto de info curso.
         articulosCarrito = [...articulosCarrito, infoCurso];
-        console.log(articulosCarrito); // Muestra el arreglo de objetos que tengo en el carrito
     }
 
     carritoHTML();
